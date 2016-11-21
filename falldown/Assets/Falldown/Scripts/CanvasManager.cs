@@ -66,8 +66,6 @@ namespace AppAdvisory.XtremNoBrakes
 
 			TextTutoDesktop.gameObject.SetActive (false);
 			TextTutoMobile.gameObject.SetActive (false);
-
-			OnClickedPlayButton ();
 		}
 
 		public void SetScoresCanvas()
@@ -85,6 +83,10 @@ namespace AppAdvisory.XtremNoBrakes
 			bool alphaIsOne = _canvasManager.menu.alpha == 1;
 			_canvasManager.menu.blocksRaycasts = alphaIsOne;
 			textPoint.gameObject.SetActive (!alphaIsOne);
+
+			if (Input.GetKeyUp (KeyCode.E)) {
+				OnClickedPlayButton ();
+			}
 
 		}
 

@@ -17,7 +17,7 @@ namespace AppAdvisory.XtremNoBrakes
 	{
 		public GameObject explosion;
 
-		bool behindPlayer = false;
+		//bool behindPlayer = false;
 
 		GameManager _gameManager;
 
@@ -28,7 +28,7 @@ namespace AppAdvisory.XtremNoBrakes
 
 		void OnEnable ()
 		{
-			behindPlayer = false;
+			//behindPlayer = false;
 
 			int count = transform.childCount;
 

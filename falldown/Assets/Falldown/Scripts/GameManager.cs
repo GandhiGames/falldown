@@ -35,7 +35,7 @@ namespace AppAdvisory.XtremNoBrakes
 
 		public AudioSource audioSource;
 
-		public Transform player;
+		//public Transform player;
 
 		bool isGameOver;
 
@@ -93,9 +93,12 @@ namespace AppAdvisory.XtremNoBrakes
 
 		private static readonly float ACCELERATION_OFFSET = 0.1f;
 
+		private WallMovement[] m_Movements;
 
 		void Awake()
 		{
+			m_Movements = GetComponentsInChildren<WallMovement> ();
+
 			_canvasManager = FindObjectOfType<CanvasManager>();
 
 			isGameOver = true;
@@ -106,19 +109,15 @@ namespace AppAdvisory.XtremNoBrakes
 
 			RenderSettings.ambientLight = Color.white;
 		}
-
+			
 		public void StartGame()
 		{
-			var obst = FindObjectsOfType<ObstacleLogic> ();
+			StartCoroutine (_StartGame ());
+		}
 
-			foreach (var o in obst) 
-			{
-				Destroy (o.gameObject);
-			}
-
-			player.gameObject.SetActive (true);
-
-
+		private IEnumerator _StartGame()
+		{
+			PlayRandomMusic ();
 
 			StartCoroutine (DoLerpAlphaCanvasGroup (1, 0, 1));
 
@@ -127,9 +126,26 @@ namespace AppAdvisory.XtremNoBrakes
 
 			StartCoroutine (DoLerpAlphaTextTuto (1, 0, 1,5));
 
+			wallParent.transform.localRotation = Quaternion.identity;
+			foreach (var move in m_Movements) {
+				move.DoMovement ();
+			}
+
+			yield return new WaitForSeconds (2f);
+
+			var obst = FindObjectsOfType<ObstacleLogic> ();
+
+			foreach (var o in obst) 
+			{
+				Destroy (o.gameObject);
+			}
+
+			//player.gameObject.SetActive (true);
+
+
 			StartCoroutine (SpawnCorout ());
 
-			PlayRandomMusic ();
+		
 
 			_point = 0;
 
@@ -143,11 +159,21 @@ namespace AppAdvisory.XtremNoBrakes
 			if (isGameOver)
 				return;
 
+			print ("reload here");
+
+			Application.LoadLevel (0);
+		
+
+			return;
+
 			isGameOver = true;
 
 			SetScores ();
 
-			player.gameObject.SetActive (false);
+			//player.gameObject.SetActive (false);
+
+
+
 
 			StartCoroutine (GameOverCorout ());
 
@@ -317,7 +343,7 @@ namespace AppAdvisory.XtremNoBrakes
 			//		CheckPlayerPosition ();
 		}
 
-		void CheckPlayerPosition()
+		/*void CheckPlayerPosition()
 		{
 			if (player.position.x < 0) 
 			{
@@ -350,7 +376,8 @@ namespace AppAdvisory.XtremNoBrakes
 					player.position = new Vector3 (player.position.x, 4.5f, player.position.z);
 				}
 			}
-		}
+		}*/
+
 		//	IEnumerator ChangeColor(){
 		//
 		//		while (true) {
